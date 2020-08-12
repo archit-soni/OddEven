@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Text, View, StyleSheet, Button, TouchableOpacity } from "react-native";
 import { AppLoading } from "expo";
+import io from "socket.io-client";
 import {
   useFonts,
   JosefinSans_100Thin,
