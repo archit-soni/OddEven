@@ -30,9 +30,6 @@ import { color } from "react-native-reanimated";
 const Stack = createStackNavigator();
 
 export default class App extends React.Component {
-  componentDidMount() {
-    const socket = io("http://172.27.0.1:3000");
-  }
   render() {
     return (
       <NavigationContainer>
@@ -464,21 +461,91 @@ function DetailsScreen({ navigation }) {
           Batting -
         </Text>
       ) : null}
-      <Text
-        style={{
-          position: "absolute",
-          backgroundColor: "blue",
-          color: "#fff",
-          fontSize: 40,
-          //    fontFamily: "JosefinSans_500Medium",
-          top: 10,
-          right: 5,
-          borderRadius: 20,
-          padding: 5,
-        }}
-      >
-        Computer - {computer}
-      </Text>
+      {mode === 1 ? (
+        out > 5 ? (
+          batting === 1 ? (
+            <Text
+              style={{
+                position: "absolute",
+                backgroundColor: "black",
+                padding: 15,
+                color: "#fff",
+                fontSize: 40,
+                //     fontFamily: "JosefinSans_500Medium",
+                bottom: 10,
+                left: 5,
+                borderRadius: 20,
+              }}
+            >
+              Computer - {computer} / {out - 5}
+            </Text>
+          ) : (
+            <Text
+              style={{
+                position: "absolute",
+                backgroundColor: "black",
+                padding: 15,
+                color: "#fff",
+                fontSize: 40,
+                //   fontFamily: "JosefinSans_500Medium",
+                bottom: 10,
+                left: 5,
+                borderRadius: 20,
+              }}
+            >
+              Computer - {computer} / 5
+            </Text>
+          )
+        ) : batting === 0 ? (
+          <Text
+            style={{
+              position: "absolute",
+              backgroundColor: "black",
+              padding: 15,
+              color: "#fff",
+              fontSize: 40,
+              //      fontFamily: "JosefinSans_500Medium",
+              bottom: 10,
+              left: 5,
+              borderRadius: 20,
+            }}
+          >
+            Computer - {computer} / {out}
+          </Text>
+        ) : (
+          <Text
+            style={{
+              position: "absolute",
+              backgroundColor: "black",
+              padding: 15,
+              color: "#fff",
+              fontSize: 40,
+              //      fontFamily: "JosefinSans_500Medium",
+              bottom: 10,
+              left: 5,
+              borderRadius: 20,
+            }}
+          >
+            Computer - {computer} / 0
+          </Text>
+        )
+      ) : (
+        <Text
+          style={{
+            position: "absolute",
+            backgroundColor: "black",
+            padding: 15,
+            color: "#fff",
+            fontSize: 40,
+            //      fontFamily: "JosefinSans_500Medium",
+            bottom: 10,
+            left: 5,
+            borderRadius: 20,
+          }}
+        >
+          Computer - {computer}
+        </Text>
+      )}
       <Text
         style={{
           marginTop: -30,
@@ -500,9 +567,7 @@ function DetailsScreen({ navigation }) {
         )}
       </Text>
       {userHolder < 7 ? (
-        <Text style={{ fontFamily: "JosefinSans_300Light", fontSize: 40 }}>
-          Pick your run
-        </Text>
+        <Text style={{ fontSize: 40 }}>Pick your run</Text>
       ) : null}
       <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
         {userHolder < 7 ? (
@@ -648,7 +713,7 @@ function DetailsScreen({ navigation }) {
       <Text
         style={{
           color: "black",
-          fontFamily: "JosefinSans_700Bold_Italic",
+          // fontFamily: "JosefinSans_700Bold_Italic",
           fontSize: 200,
         }}
       >
@@ -668,6 +733,40 @@ function DetailsScreen({ navigation }) {
       </Text>
       {mode === 1 ? (
         out > 5 ? (
+          batting === 0 ? (
+            <Text
+              style={{
+                position: "absolute",
+                backgroundColor: "black",
+                padding: 15,
+                color: "#fff",
+                fontSize: 40,
+                //     fontFamily: "JosefinSans_500Medium",
+                bottom: 10,
+                left: 5,
+                borderRadius: 20,
+              }}
+            >
+              You - {user} / {out - 5}
+            </Text>
+          ) : (
+            <Text
+              style={{
+                position: "absolute",
+                backgroundColor: "black",
+                padding: 15,
+                color: "#fff",
+                fontSize: 40,
+                //   fontFamily: "JosefinSans_500Medium",
+                bottom: 10,
+                left: 5,
+                borderRadius: 20,
+              }}
+            >
+              You - {user} / 5
+            </Text>
+          )
+        ) : batting === 0 ? (
           <Text
             style={{
               position: "absolute",
@@ -675,13 +774,13 @@ function DetailsScreen({ navigation }) {
               padding: 15,
               color: "#fff",
               fontSize: 40,
-              fontFamily: "JosefinSans_500Medium",
+              //      fontFamily: "JosefinSans_500Medium",
               bottom: 10,
               left: 5,
               borderRadius: 20,
             }}
           >
-            You - {user} / {out - 5}
+            You - {user} / {out}
           </Text>
         ) : (
           <Text
@@ -691,13 +790,13 @@ function DetailsScreen({ navigation }) {
               padding: 15,
               color: "#fff",
               fontSize: 40,
-              fontFamily: "JosefinSans_500Medium",
+              //      fontFamily: "JosefinSans_500Medium",
               bottom: 10,
               left: 5,
               borderRadius: 20,
             }}
           >
-            You - {user} / {out}
+            You - {user} / 0
           </Text>
         )
       ) : (
@@ -708,7 +807,7 @@ function DetailsScreen({ navigation }) {
             padding: 15,
             color: "#fff",
             fontSize: 40,
-            fontFamily: "JosefinSans_500Medium",
+            //      fontFamily: "JosefinSans_500Medium",
             bottom: 10,
             left: 5,
             borderRadius: 20,
@@ -724,7 +823,7 @@ function DetailsScreen({ navigation }) {
             right: 40,
             position: "absolute",
             fontSize: 50,
-            fontFamily: "JosefinSans_600SemiBold_Italic",
+            //      fontFamily: "JosefinSans_600SemiBold_Italic",
           }}
         >
           - Batting
