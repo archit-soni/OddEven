@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { Component, useState, useEffect } from "react";
 import {
   NavigationContainer,
   StackActions,
@@ -26,10 +26,13 @@ import {
 } from "@expo-google-fonts/josefin-sans";
 import { render } from "react-dom";
 import { color } from "react-native-reanimated";
-
+import io from "socket.io-client";
 const Stack = createStackNavigator();
 
-export default class App extends React.Component {
+export default class App extends Component {
+  componentDidMount() {
+    const socket = io("http://172.27.0.1:3000");
+  }
   render() {
     return (
       <NavigationContainer>
