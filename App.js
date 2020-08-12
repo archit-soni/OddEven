@@ -829,6 +829,41 @@ function DetailsScreen({ navigation }) {
           - Batting
         </Text>
       ) : null}
+      {mode === 2 ? (
+        balls <= 30 ? (
+          <Text
+            style={{
+              position: "absolute",
+              backgroundColor: "white",
+              padding: 15,
+              color: "#000",
+              fontSize: 20,
+              //      fontFamily: "JosefinSans_500Medium",
+              bottom: 100,
+              left: 5,
+              borderRadius: 20,
+            }}
+          >
+            Overs - {Math.floor(balls / 6)}.{balls % 6}
+          </Text>
+        ) : (
+          <Text
+            style={{
+              position: "absolute",
+              backgroundColor: "white",
+              padding: 15,
+              color: "#000",
+              fontSize: 20,
+              //      fontFamily: "JosefinSans_500Medium",
+              bottom: 100,
+              left: 5,
+              borderRadius: 20,
+            }}
+          >
+            Overs - {Math.floor((balls - 30) / 6)}.{(balls - 30) % 6}
+          </Text>
+        )
+      ) : null}
       <Text></Text>
     </View>
   );
