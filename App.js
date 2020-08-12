@@ -25,30 +25,11 @@ import { render } from "react-dom";
 
 const Stack = createStackNavigator();
 
-export default () => {
-  let [fontsLoaded] = useFonts({
-    JosefinSans_100Thin,
-    JosefinSans_200ExtraLight,
-    JosefinSans_300Light,
-    JosefinSans_400Regular,
-    JosefinSans_500Medium,
-    JosefinSans_600SemiBold,
-    JosefinSans_700Bold,
-    JosefinSans_100Thin_Italic,
-    JosefinSans_200ExtraLight_Italic,
-    JosefinSans_300Light_Italic,
-    JosefinSans_400Regular_Italic,
-    JosefinSans_500Medium_Italic,
-    JosefinSans_600SemiBold_Italic,
-    JosefinSans_700Bold_Italic,
-  });
-
-  let fontSize = 24;
-  let paddingVertical = 6;
-
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  } else {
+export default class App extends React.Component {
+  componentDidMount() {
+    const socket = io("http://172.27.0.1:3000");
+  }
+  render() {
     return (
       <NavigationContainer>
         <Stack.Navigator
@@ -64,14 +45,16 @@ export default () => {
       </NavigationContainer>
     );
   }
-};
-
+}
 var batting = 0;
 var userHolder = 0;
 var computerHolder = 0;
 var user = 0;
 var computer = 0;
 var out = 0;
+var balls = 0;
+var mode = 0;
+var switched = 0;
 function HomeScreen({ navigation }) {
   return (
     <View
@@ -87,7 +70,7 @@ function HomeScreen({ navigation }) {
           color: "#fff",
           fontSize: 90,
           // Note the quoting of the value for `fontFamily` here; it expects a string!
-          fontFamily: "JosefinSans_700Bold",
+          // fontFamily: "JosefinSans_700Bold",
         }}
       >
         ODD
@@ -96,22 +79,67 @@ function HomeScreen({ navigation }) {
             color: "#000",
             fontSize: 90,
             // Note the quoting of the value for `fontFamily` here; it expects a string!
-            fontFamily: "JosefinSans_700Bold",
+            // fontFamily: "JosefinSans_700Bold",
           }}
         >
           {" "}
           EVE
         </Text>
       </Text>
-      <Button
-        color="red"
-        title="Play"
-        onPress={() => navigation.navigate("Choice")}
-      />
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Choice");
+          setMode(0);
+        }}
+      >
+        <Text
+          style={{
+            color: "#fff",
+            backgroundColor: "red",
+            padding: 10,
+            margin: 10,
+          }}
+        >
+          CLASSIC
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Choice");
+          setMode(1);
+        }}
+      >
+        <Text
+          style={{
+            color: "#fff",
+            backgroundColor: "pink",
+            padding: 10,
+            margin: 10,
+          }}
+        >
+          5-WICKETS
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Choice");
+          setMode(2);
+        }}
+      >
+        <Text
+          style={{
+            color: "#fff",
+            backgroundColor: "orange",
+            padding: 10,
+            margin: 10,
+          }}
+        >
+          5-OVERS
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
-
 function innings(you, pc) {
   if (you == pc) {
     if (batting == 1) {
