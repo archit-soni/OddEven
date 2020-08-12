@@ -467,13 +467,13 @@ function DetailsScreen({ navigation }) {
             <Text
               style={{
                 position: "absolute",
-                backgroundColor: "black",
-                padding: 15,
+                backgroundColor: "blue",
+                padding: 5,
                 color: "#fff",
                 fontSize: 40,
                 //     fontFamily: "JosefinSans_500Medium",
-                bottom: 10,
-                left: 5,
+                top: 10,
+                right: 5,
                 borderRadius: 20,
               }}
             >
@@ -483,13 +483,13 @@ function DetailsScreen({ navigation }) {
             <Text
               style={{
                 position: "absolute",
-                backgroundColor: "black",
-                padding: 15,
+                backgroundColor: "blue",
+                padding: 5,
                 color: "#fff",
                 fontSize: 40,
                 //   fontFamily: "JosefinSans_500Medium",
-                bottom: 10,
-                left: 5,
+                top: 10,
+                right: 5,
                 borderRadius: 20,
               }}
             >
@@ -500,13 +500,13 @@ function DetailsScreen({ navigation }) {
           <Text
             style={{
               position: "absolute",
-              backgroundColor: "black",
-              padding: 15,
+              backgroundColor: "blue",
+              padding: 5,
               color: "#fff",
               fontSize: 40,
               //      fontFamily: "JosefinSans_500Medium",
-              bottom: 10,
-              left: 5,
+              top: 10,
+              right: 5,
               borderRadius: 20,
             }}
           >
@@ -516,13 +516,13 @@ function DetailsScreen({ navigation }) {
           <Text
             style={{
               position: "absolute",
-              backgroundColor: "black",
-              padding: 15,
+              backgroundColor: "blue",
+              padding: 5,
               color: "#fff",
               fontSize: 40,
               //      fontFamily: "JosefinSans_500Medium",
-              bottom: 10,
-              left: 5,
+              top: 10,
+              right: 5,
               borderRadius: 20,
             }}
           >
