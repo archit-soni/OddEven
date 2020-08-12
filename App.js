@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  StackActions,
+  NavigationActions,
+} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Text, View, StyleSheet, Button, TouchableOpacity } from "react-native";
 import { AppLoading } from "expo";
@@ -21,33 +25,15 @@ import {
   JosefinSans_700Bold_Italic,
 } from "@expo-google-fonts/josefin-sans";
 import { render } from "react-dom";
+import { color } from "react-native-reanimated";
 
 const Stack = createStackNavigator();
 
-export default () => {
-  let [fontsLoaded] = useFonts({
-    JosefinSans_100Thin,
-    JosefinSans_200ExtraLight,
-    JosefinSans_300Light,
-    JosefinSans_400Regular,
-    JosefinSans_500Medium,
-    JosefinSans_600SemiBold,
-    JosefinSans_700Bold,
-    JosefinSans_100Thin_Italic,
-    JosefinSans_200ExtraLight_Italic,
-    JosefinSans_300Light_Italic,
-    JosefinSans_400Regular_Italic,
-    JosefinSans_500Medium_Italic,
-    JosefinSans_600SemiBold_Italic,
-    JosefinSans_700Bold_Italic,
-  });
-
-  let fontSize = 24;
-  let paddingVertical = 6;
-
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  } else {
+export default class App extends React.Component {
+  componentDidMount() {
+    const socket = io("http://172.27.0.1:3000");
+  }
+  render() {
     return (
       <NavigationContainer>
         <Stack.Navigator
@@ -63,7 +49,7 @@ export default () => {
       </NavigationContainer>
     );
   }
-};
+}
 
 var batting = 0;
 var userHolder = 0;
@@ -71,6 +57,9 @@ var computerHolder = 0;
 var user = 0;
 var computer = 0;
 var out = 0;
+var balls = 0;
+var mode = 0;
+var switched = 0;
 function HomeScreen({ navigation }) {
   return (
     <View
@@ -86,7 +75,7 @@ function HomeScreen({ navigation }) {
           color: "#fff",
           fontSize: 90,
           // Note the quoting of the value for `fontFamily` here; it expects a string!
-          fontFamily: "JosefinSans_700Bold",
+          // fontFamily: "JosefinSans_700Bold",
         }}
       >
         ODD
@@ -95,47 +84,161 @@ function HomeScreen({ navigation }) {
             color: "#000",
             fontSize: 90,
             // Note the quoting of the value for `fontFamily` here; it expects a string!
-            fontFamily: "JosefinSans_700Bold",
+            // fontFamily: "JosefinSans_700Bold",
           }}
         >
           {" "}
           EVE
         </Text>
       </Text>
-      <Button
-        color="red"
-        title="Play"
-        onPress={() => navigation.navigate("Choice")}
-      />
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Choice");
+          setMode(0);
+        }}
+      >
+        <Text
+          style={{
+            color: "#fff",
+            backgroundColor: "red",
+            padding: 10,
+            margin: 10,
+          }}
+        >
+          CLASSIC
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Choice");
+          setMode(1);
+        }}
+      >
+        <Text
+          style={{
+            color: "#fff",
+            backgroundColor: "pink",
+            padding: 10,
+            margin: 10,
+          }}
+        >
+          5-WICKETS
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Choice");
+          setMode(2);
+        }}
+      >
+        <Text
+          style={{
+            color: "#fff",
+            backgroundColor: "orange",
+            padding: 10,
+            margin: 10,
+          }}
+        >
+          5-OVERS
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
+function setMode(which) {
+  mode = which;
+}
+
 function innings(you, pc) {
-  if (you == pc) {
-    if (batting == 1) {
-      batting = 0;
-    } else if (batting == 0) {
-      batting = 1;
+  if (mode == 0) {
+    if (you == pc) {
+      if (batting == 1) {
+        batting = 0;
+      } else if (batting == 0) {
+        batting = 1;
+      }
+      out = out + 1;
     }
-    out = out + 1;
-  }
-  if (out > 1) {
-    if (user > computer) {
-      userHolder = 7;
-      computerHolder = 8;
-    } else if (computer > user) {
-      userHolder = 8;
-      computerHolder = 7;
+    if (out > 1) {
+      if (user > computer) {
+        userHolder = 7;
+        computerHolder = 8;
+      } else if (computer > user) {
+        userHolder = 8;
+        computerHolder = 7;
+      }
+    }
+    if (out == 1) {
+      if (batting == 1 && computer > user) {
+        userHolder = 8;
+        computerHolder = 7;
+      } else if (batting == 0 && user > computer) {
+        userHolder = 7;
+        computerHolder = 8;
+      }
     }
   }
-  if (out == 1) {
-    if (batting == 1 && computer > user) {
-      userHolder = 8;
-      computerHolder = 7;
-    } else if (batting == 0 && user > computer) {
-      userHolder = 7;
-      computerHolder = 8;
+
+  if (mode == 1) {
+    if (you == pc) {
+      out = out + 1;
+    }
+    if (out == 5 && switched == 0) {
+      if (batting == 0) {
+        batting = 1;
+        switched = 1;
+      } else if (batting == 1) {
+        batting = 0;
+        switched = 1;
+      }
+    }
+    if (out > 5) {
+      if (batting == 1 && computer > user) {
+        userHolder = 8;
+        computerHolder = 7;
+      } else if (batting == 0 && user > computer) {
+        userHolder = 7;
+        computerHolder = 8;
+      }
+      if (out == 10) {
+        if (user > computer) {
+          userHolder = 7;
+          computerHolder = 8;
+        } else if (computer > user) {
+          userHolder = 8;
+          computerHolder = 7;
+        }
+      }
+    }
+  }
+
+  balls = balls + 1;
+  if (mode == 2) {
+    if (balls == 30) {
+      if (batting == 0) {
+        batting = 1;
+      } else if (batting == 1) {
+        batting = 0;
+      }
+    }
+    if (balls > 30) {
+      if (batting == 1 && computer > user) {
+        userHolder = 8;
+        computerHolder = 7;
+      } else if (batting == 0 && user > computer) {
+        userHolder = 7;
+        computerHolder = 8;
+      }
+    }
+    if (balls == 60) {
+      if (user > computer) {
+        userHolder = 7;
+        computerHolder = 8;
+      } else if (computer > user) {
+        userHolder = 8;
+        computerHolder = 7;
+      }
     }
   }
 }
@@ -287,7 +390,7 @@ function choice({ navigation }) {
         >
           <Text
             style={{
-              fontFamily: "JosefinSans_600SemiBold_Italic",
+              //  fontFamily: "JosefinSans_600SemiBold_Italic",
               fontSize: 40,
               color: "#fff",
             }}
@@ -313,7 +416,7 @@ function choice({ navigation }) {
         >
           <Text
             style={{
-              fontFamily: "JosefinSans_600SemiBold_Italic",
+              //  fontFamily: "JosefinSans_600SemiBold_Italic",
               fontSize: 40,
               color: "#fff",
             }}
@@ -337,6 +440,7 @@ function choice({ navigation }) {
     </View>
   );
 }*/
+
 function DetailsScreen({ navigation }) {
   return (
     <View
@@ -354,7 +458,7 @@ function DetailsScreen({ navigation }) {
             left: 40,
             position: "absolute",
             fontSize: 50,
-            fontFamily: "JosefinSans_600SemiBold_Italic",
+            //  fontFamily: "JosefinSans_600SemiBold_Italic",
           }}
         >
           Batting -
@@ -366,7 +470,7 @@ function DetailsScreen({ navigation }) {
           backgroundColor: "blue",
           color: "#fff",
           fontSize: 40,
-          fontFamily: "JosefinSans_500Medium",
+          //    fontFamily: "JosefinSans_500Medium",
           top: 10,
           right: 5,
           borderRadius: 20,
@@ -379,7 +483,7 @@ function DetailsScreen({ navigation }) {
         style={{
           marginTop: -30,
           color: "blue",
-          fontFamily: "JosefinSans_700Bold_Italic",
+          //    fontFamily: "JosefinSans_700Bold_Italic",
           fontSize: 200,
         }}
       >
@@ -562,21 +666,57 @@ function DetailsScreen({ navigation }) {
           <Text>{userHolder}</Text>
         )}
       </Text>
-      <Text
-        style={{
-          position: "absolute",
-          backgroundColor: "black",
-          padding: 15,
-          color: "#fff",
-          fontSize: 40,
-          fontFamily: "JosefinSans_500Medium",
-          bottom: 10,
-          left: 5,
-          borderRadius: 20,
-        }}
-      >
-        You - {user}
-      </Text>
+      {mode === 1 ? (
+        out > 5 ? (
+          <Text
+            style={{
+              position: "absolute",
+              backgroundColor: "black",
+              padding: 15,
+              color: "#fff",
+              fontSize: 40,
+              fontFamily: "JosefinSans_500Medium",
+              bottom: 10,
+              left: 5,
+              borderRadius: 20,
+            }}
+          >
+            You - {user} / {out - 5}
+          </Text>
+        ) : (
+          <Text
+            style={{
+              position: "absolute",
+              backgroundColor: "black",
+              padding: 15,
+              color: "#fff",
+              fontSize: 40,
+              fontFamily: "JosefinSans_500Medium",
+              bottom: 10,
+              left: 5,
+              borderRadius: 20,
+            }}
+          >
+            You - {user} / {out}
+          </Text>
+        )
+      ) : (
+        <Text
+          style={{
+            position: "absolute",
+            backgroundColor: "black",
+            padding: 15,
+            color: "#fff",
+            fontSize: 40,
+            fontFamily: "JosefinSans_500Medium",
+            bottom: 10,
+            left: 5,
+            borderRadius: 20,
+          }}
+        >
+          You - {user}
+        </Text>
+      )}
       {batting === 0 ? (
         <Text
           style={{
