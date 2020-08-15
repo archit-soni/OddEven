@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   NavigationContainer,
   StackActions,
@@ -26,14 +26,33 @@ import {
 } from "@expo-google-fonts/josefin-sans";
 import { render } from "react-dom";
 import { color } from "react-native-reanimated";
-import io from "socket.io-client";
+
 const Stack = createStackNavigator();
 
-export default class App extends Component {
-  componentDidMount() {
-    const socket = io("http://172.27.0.1:3000");
-  }
-  render() {
+export default () => {
+  let [fontsLoaded] = useFonts({
+    JosefinSans_100Thin,
+    JosefinSans_200ExtraLight,
+    JosefinSans_300Light,
+    JosefinSans_400Regular,
+    JosefinSans_500Medium,
+    JosefinSans_600SemiBold,
+    JosefinSans_700Bold,
+    JosefinSans_100Thin_Italic,
+    JosefinSans_200ExtraLight_Italic,
+    JosefinSans_300Light_Italic,
+    JosefinSans_400Regular_Italic,
+    JosefinSans_500Medium_Italic,
+    JosefinSans_600SemiBold_Italic,
+    JosefinSans_700Bold_Italic,
+  });
+
+  let fontSize = 24;
+  let paddingVertical = 6;
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
     return (
       <NavigationContainer>
         <Stack.Navigator
@@ -49,7 +68,7 @@ export default class App extends Component {
       </NavigationContainer>
     );
   }
-}
+};
 
 var batting = 0;
 var userHolder = 0;
@@ -75,7 +94,7 @@ function HomeScreen({ navigation }) {
           color: "#fff",
           fontSize: 90,
           // Note the quoting of the value for `fontFamily` here; it expects a string!
-          // fontFamily: "JosefinSans_700Bold",
+          fontFamily: "JosefinSans_700Bold",
         }}
       >
         ODD
@@ -84,7 +103,7 @@ function HomeScreen({ navigation }) {
             color: "#000",
             fontSize: 90,
             // Note the quoting of the value for `fontFamily` here; it expects a string!
-            // fontFamily: "JosefinSans_700Bold",
+            fontFamily: "JosefinSans_700Bold",
           }}
         >
           {" "}
@@ -304,6 +323,7 @@ function uSix() {
   innings(userHolder, computerHolder);
 }
 function reset() {
+  balls = 0;
   out = 0;
   userHolder = 0;
   computerHolder = 0;
@@ -390,7 +410,7 @@ function choice({ navigation }) {
         >
           <Text
             style={{
-              //  fontFamily: "JosefinSans_600SemiBold_Italic",
+              fontFamily: "JosefinSans_600SemiBold_Italic",
               fontSize: 40,
               color: "#fff",
             }}
@@ -416,7 +436,7 @@ function choice({ navigation }) {
         >
           <Text
             style={{
-              //  fontFamily: "JosefinSans_600SemiBold_Italic",
+              fontFamily: "JosefinSans_600SemiBold_Italic",
               fontSize: 40,
               color: "#fff",
             }}
@@ -458,7 +478,7 @@ function DetailsScreen({ navigation }) {
             left: 40,
             position: "absolute",
             fontSize: 50,
-            //  fontFamily: "JosefinSans_600SemiBold_Italic",
+            fontFamily: "JosefinSans_600SemiBold_Italic",
           }}
         >
           Batting -
@@ -474,7 +494,7 @@ function DetailsScreen({ navigation }) {
                 padding: 5,
                 color: "#fff",
                 fontSize: 40,
-                //     fontFamily: "JosefinSans_500Medium",
+                fontFamily: "JosefinSans_500Medium",
                 top: 10,
                 right: 5,
                 borderRadius: 20,
@@ -490,7 +510,7 @@ function DetailsScreen({ navigation }) {
                 padding: 5,
                 color: "#fff",
                 fontSize: 40,
-                //   fontFamily: "JosefinSans_500Medium",
+                fontFamily: "JosefinSans_500Medium",
                 top: 10,
                 right: 5,
                 borderRadius: 20,
@@ -499,7 +519,7 @@ function DetailsScreen({ navigation }) {
               Computer - {computer} / 5
             </Text>
           )
-        ) : batting === 0 ? (
+        ) : batting === 1 ? (
           <Text
             style={{
               position: "absolute",
@@ -507,7 +527,7 @@ function DetailsScreen({ navigation }) {
               padding: 5,
               color: "#fff",
               fontSize: 40,
-              //      fontFamily: "JosefinSans_500Medium",
+              fontFamily: "JosefinSans_500Medium",
               top: 10,
               right: 5,
               borderRadius: 20,
@@ -523,7 +543,7 @@ function DetailsScreen({ navigation }) {
               padding: 5,
               color: "#fff",
               fontSize: 40,
-              //      fontFamily: "JosefinSans_500Medium",
+              fontFamily: "JosefinSans_500Medium",
               top: 10,
               right: 5,
               borderRadius: 20,
@@ -540,7 +560,7 @@ function DetailsScreen({ navigation }) {
             padding: 5,
             color: "#fff",
             fontSize: 40,
-            //      fontFamily: "JosefinSans_500Medium",
+            fontFamily: "JosefinSans_500Medium",
             top: 10,
             right: 5,
             borderRadius: 20,
@@ -553,7 +573,7 @@ function DetailsScreen({ navigation }) {
         style={{
           marginTop: -30,
           color: "blue",
-          //    fontFamily: "JosefinSans_700Bold_Italic",
+          fontFamily: "JosefinSans_700Bold_Italic",
           fontSize: 200,
         }}
       >
@@ -570,7 +590,11 @@ function DetailsScreen({ navigation }) {
         )}
       </Text>
       {userHolder < 7 ? (
-        <Text style={{ fontSize: 40 }}>Pick your run</Text>
+        <Text
+          style={{ fontFamily: "JosefinSans_300Light_Italic", fontSize: 40 }}
+        >
+          Pick your run
+        </Text>
       ) : null}
       <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
         {userHolder < 7 ? (
@@ -716,7 +740,7 @@ function DetailsScreen({ navigation }) {
       <Text
         style={{
           color: "black",
-          // fontFamily: "JosefinSans_700Bold_Italic",
+          fontFamily: "JosefinSans_700Bold_Italic",
           fontSize: 200,
         }}
       >
@@ -744,7 +768,7 @@ function DetailsScreen({ navigation }) {
                 padding: 15,
                 color: "#fff",
                 fontSize: 40,
-                //     fontFamily: "JosefinSans_500Medium",
+                fontFamily: "JosefinSans_500Medium",
                 bottom: 10,
                 left: 5,
                 borderRadius: 20,
@@ -760,7 +784,7 @@ function DetailsScreen({ navigation }) {
                 padding: 15,
                 color: "#fff",
                 fontSize: 40,
-                //   fontFamily: "JosefinSans_500Medium",
+                fontFamily: "JosefinSans_500Medium",
                 bottom: 10,
                 left: 5,
                 borderRadius: 20,
@@ -777,7 +801,7 @@ function DetailsScreen({ navigation }) {
               padding: 15,
               color: "#fff",
               fontSize: 40,
-              //      fontFamily: "JosefinSans_500Medium",
+              fontFamily: "JosefinSans_500Medium",
               bottom: 10,
               left: 5,
               borderRadius: 20,
@@ -793,7 +817,7 @@ function DetailsScreen({ navigation }) {
               padding: 15,
               color: "#fff",
               fontSize: 40,
-              //      fontFamily: "JosefinSans_500Medium",
+              fontFamily: "JosefinSans_500Medium",
               bottom: 10,
               left: 5,
               borderRadius: 20,
@@ -810,7 +834,7 @@ function DetailsScreen({ navigation }) {
             padding: 15,
             color: "#fff",
             fontSize: 40,
-            //      fontFamily: "JosefinSans_500Medium",
+            fontFamily: "JosefinSans_500Medium",
             bottom: 10,
             left: 5,
             borderRadius: 20,
@@ -826,7 +850,7 @@ function DetailsScreen({ navigation }) {
             right: 40,
             position: "absolute",
             fontSize: 50,
-            //      fontFamily: "JosefinSans_600SemiBold_Italic",
+            fontFamily: "JosefinSans_600SemiBold_Italic",
           }}
         >
           - Batting
@@ -841,7 +865,7 @@ function DetailsScreen({ navigation }) {
               padding: 15,
               color: "#000",
               fontSize: 20,
-              //      fontFamily: "JosefinSans_500Medium",
+              fontFamily: "JosefinSans_500Medium",
               bottom: 100,
               left: 5,
               borderRadius: 20,
@@ -857,7 +881,7 @@ function DetailsScreen({ navigation }) {
               padding: 15,
               color: "#000",
               fontSize: 20,
-              //      fontFamily: "JosefinSans_500Medium",
+              fontFamily: "JosefinSans_500Medium",
               bottom: 100,
               left: 5,
               borderRadius: 20,
